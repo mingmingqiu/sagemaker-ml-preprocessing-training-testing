@@ -6,7 +6,7 @@ WORKDIR /opt/ml/code
 
 # Install dependencies
 RUN pip install --upgrade pip \
- && pip install pandas numpy scikit-learn boto3 s3fs \
+ && pip install pandas numpy scikit-learn boto3 s3fs
 
 # Copy inference script
 COPY serve.py /opt/ml/code/serve.py
