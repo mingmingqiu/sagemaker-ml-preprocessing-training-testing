@@ -7,9 +7,12 @@ WORKDIR /opt/ml/code
 # Install additional Python dependencies
 RUN pip install --upgrade pip && pip install pandas numpy scikit-learn boto3 s3fs
 
-# ✅ Copy the serve.py to where SageMaker expects it
-COPY serve.py /opt/program/serve.py
+# ✅ Copy inference script
+COPY serve.py /opt/ml/code/serve.py
 
-# (Optional) SageMaker expects this location for inference script
+# ✅ Tell SageMaker which script to run
 ENV SAGEMAKER_PROGRAM=serve.py
 ENV PYTHONUNBUFFERED=TRUE
+
+# ✅ IMPORTANT: Add entrypoint to start the inference server
+ENTRYPOINT ["python3", "-m", "sagemaker_inference"]
