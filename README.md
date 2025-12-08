@@ -88,3 +88,12 @@ s3://<bucket-name>/models/<pipeline-name>/output/model.tar.gz
 Serve.py for inference should be copied in Dockerfile
 
 because SageMaker Inference Containers expect the inference entry point to be located in /opt/program/serve.py, not /opt/ml/code/.
+
+<h2>6. Paths and their purposes</h2>
+
+| Path                  | Used For                           | When?                       |
+| --------------------- | ---------------------------------- | --------------------------- |
+| `/opt/program/`       | Inference code (e.g., `serve.py`)  | Custom inference containers |
+| `/opt/ml/code/`       | Training code (e.g., `train.py`)   | Script mode training jobs   |
+| `/opt/ml/model/`      | Output model artifacts (`.tar.gz`) | After training              |
+| `/opt/ml/processing/` | Data processing input/output       | Processing jobs             |
