@@ -1,18 +1,20 @@
-# Use an official SageMaker PyTorch image as the base
+# ✅ Base image: Training image (does NOT include inference libs)
 FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.13.1-cpu-py39-ubuntu20.04-sagemaker
 
-# Set the working directory inside the container
+# Set working directory
 WORKDIR /opt/ml/code
 
-# Install additional Python dependencies
-RUN pip install --upgrade pip && pip install pandas numpy scikit-learn boto3 s3fs
+# Install dependencies
+RUN pip install --upgrade pip \
+ && pip install pandas numpy scikit-learn boto3 s3fs \
+ && pip install sagemaker-inference  # ✅ THIS LINE IS CRUCIAL
 
-# ✅ Copy inference script
+# Copy inference script
 COPY serve.py /opt/ml/code/serve.py
 
-# ✅ Tell SageMaker which script to run
+# Set environment variables
 ENV SAGEMAKER_PROGRAM=serve.py
 ENV PYTHONUNBUFFERED=TRUE
 
-# ✅ IMPORTANT: Add entrypoint to start the inference server
+# ✅ Launch inference server
 ENTRYPOINT ["python3", "-m", "sagemaker_inference"]
