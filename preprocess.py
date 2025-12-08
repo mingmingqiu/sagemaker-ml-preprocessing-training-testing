@@ -1,6 +1,8 @@
 import pandas as pd
 import boto3
 
+print("here preprocessing")
+
 input_path = "/opt/ml/processing/input/bank-additional-full.csv"
 output_path = "/opt/ml/processing/output/bank-additional-processed.csv"
 

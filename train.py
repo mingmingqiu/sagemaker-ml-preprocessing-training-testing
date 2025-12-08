@@ -3,13 +3,16 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 import joblib
 import boto3
+import os
 
-bucket_name = "feature-engineering-bucket-989220949c9c"
-input_path = "/opt/ml/processing/output/bank-additional-processed.csv"
-model_output_key = "Models/random-forest-model.joblib"
+print("here training")
+
+input_path = "/opt/ml/input/data/training/bank-additional-processed.csv"
+
+contents = os.listdir(input_path)
+print(contents)
 
 # Load processed data
-s3 = boto3.client("s3")
 df = pd.read_csv(input_path)
 
 # Train-test split
@@ -23,5 +26,3 @@ model.fit(X_train, y_train)
 
 # Save the model
 joblib.dump(model, "/opt/ml/model/model.joblib")
-s3.upload_file("/opt/ml/model/model.joblib", bucket_name, model_output_key)
-print(f"Trained model saved to s3://{bucket_name}/{ model_output_key}")

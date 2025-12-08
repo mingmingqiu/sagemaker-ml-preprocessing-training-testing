@@ -1,5 +1,5 @@
 # Use an official SageMaker PyTorch image as the base
-FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.13.1-cpu-py39-ubuntu20.04-sagemaker
+FROM 961807745392.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.13.1-cpu-py39-ubuntu20.04-sagemaker
 
 # Set the working directory inside the container
 WORKDIR /opt/ml/code
