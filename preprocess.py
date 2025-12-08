@@ -13,5 +13,8 @@ df = pd.read_csv(input_path)
 df["age_squared"] = df["age"] ** 2
 df = pd.get_dummies(df, drop_first=True)
 
+# Rename label column
+df.rename(columns={"y_yes": "y"}, inplace=True)
+
 # Save processed data
 df.to_csv(output_path, index=False)

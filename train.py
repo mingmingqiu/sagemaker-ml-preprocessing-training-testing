@@ -7,13 +7,19 @@ import os
 
 print("here training")
 
-input_path = "/opt/ml/input/data/training/bank-additional-processed.csv"
+input_path = "/opt/ml/input/data/train/bank-additional-processed.csv"
 
-contents = os.listdir(input_path)
-print(contents)
+for root, dirs, files in os.walk("/opt/ml/input/"):
+    for file in files:
+        print(os.path.join(root, file))
 
 # Load processed data
 df = pd.read_csv(input_path)
+
+print(df.keys())
+print(df.head())
+
+df.rename(columns={"y_yes": "y"}, inplace=True)
 
 # Train-test split
 X = df.drop(columns=["y"])
