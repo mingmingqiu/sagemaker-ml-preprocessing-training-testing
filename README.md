@@ -83,3 +83,8 @@ Anything you save here will be automatically uploaded to:
 ```bash
 s3://<bucket-name>/models/<pipeline-name>/output/model.tar.gz
 ```
+
+<h2>5. Inference</h2>
+Serve.py for inference should be copied in Dockerfile
+
+because SageMaker Inference Containers expect the inference entry point to be located in /opt/program/serve.py, not /opt/ml/code/.
