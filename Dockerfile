@@ -11,5 +11,5 @@ RUN pip install --upgrade pip && pip install pandas numpy scikit-learn boto3 s3f
 COPY serve.py /opt/program/serve.py
 
 # (Optional) SageMaker expects this location for inference script
-ENV SAGEMAKER_PROGRAM serve.py
+ENV SAGEMAKER_PROGRAM=serve.py
 ENV PYTHONUNBUFFERED=TRUE
