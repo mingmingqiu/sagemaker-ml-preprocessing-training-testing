@@ -7,10 +7,10 @@ WORKDIR /opt/ml/code
 # Install additional Python dependencies
 RUN pip install --upgrade pip && pip install pandas numpy scikit-learn boto3 s3fs
 
-# Copy preprocessing and training scripts into the container
-COPY preprocess.py /opt/ml/code/preprocess.py
-COPY train.py /opt/ml/code/train.py
-COPY test.py /opt/ml/code/test.py
+# # Copy preprocessing and training scripts into the container
+# COPY preprocess.py /opt/ml/code/preprocess.py
+# COPY train.py /opt/ml/code/train.py
+# COPY test.py /opt/ml/code/test.py
 
 # Set entrypoint script (to allow for flexibility)
-ENTRYPOINT ["python", "train.py"]
+# ENTRYPOINT ["python", "train.py"]
