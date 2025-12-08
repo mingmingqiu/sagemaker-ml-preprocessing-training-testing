@@ -1,5 +1,5 @@
 <h1>Introduction</h1>
-The whole popeline is in ```ml-preprocessing-training-test.ipynb``` containing three jobs: preprocessing, training and testing.
+The whole popeline is in `ml-preprocessing-training-test.ipynb` containing three jobs: preprocessing, training and testing.
 
 <h2>1. Processing Jobs support arbitrary scripts + arbitrary input/output paths</h2>
 Processing jobs (via ScriptProcessor, Processor, ProcessingStep) are designed for:
