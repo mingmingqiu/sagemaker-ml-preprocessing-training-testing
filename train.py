@@ -8,6 +8,7 @@ import os
 print("here training")
 
 input_path = "/opt/ml/input/data/train/bank-additional-processed.csv"
+model_output_path = "/opt/ml/model/model.pkl"
 
 for root, dirs, files in os.walk("/opt/ml/input/"):
     for file in files:
@@ -30,5 +31,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
-# Save the model
-joblib.dump(model, "/opt/ml/model/model.joblib")
+# # Save the model
+# joblib.dump(model, "/opt/ml/model/model.pkl")
+
+# ✅ Save model along with feature names
+feature_names = X_train.columns.tolist()
+joblib.dump((model, feature_names), model_output_path)
+
+print("✅ Model saved to:", model_output_path)

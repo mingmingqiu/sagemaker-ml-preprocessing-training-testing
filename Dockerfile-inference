@@ -1,15 +1,16 @@
-# ✅ CORRECT inference image
-FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-inference:1.13.1-cpu-py39-ubuntu20.04-sagemaker
+# Use official SageMaker inference base image for CPU
+FROM 763104351884.dkr.ecr.ap-south-1.amazonaws.com/sagemaker-scikit-learn:1.0-1-cpu-py3
 
+# Set working directory
 WORKDIR /opt/ml/code
 
-# Install dependencies
+# Install any extra dependencies if needed
 RUN pip install --upgrade pip \
- && pip install pandas numpy scikit-learn boto3 s3fs joblib
+ && pip install pandas numpy s3fs
 
-# Copy your inference script
+# Copy inference script
 COPY serve.py /opt/ml/code/serve.py
 
-# Tell SageMaker which file to call
-ENV SAGEMAKER_PROGRAM=serve.py
-ENV PYTHONUNBUFFERED=TRUE
+# SageMaker expects this
+ENV SAGEMAKER_PROGRAM serve.py
+ENV PYTHONUNBUFFERED TRUE
