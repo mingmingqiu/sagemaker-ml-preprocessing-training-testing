@@ -93,7 +93,13 @@ because SageMaker Inference Containers expect the inference entry point to be lo
 
 | Path                  | Used For                           | When?                       |
 | --------------------- | ---------------------------------- | --------------------------- |
-| `/opt/program/`       | Inference code (e.g., `serve.py`)  | Custom inference containers |
+| `/opt/ml/code/`       | Inference code (e.g., `serve.py`)  | Custom inference containers |
 | `/opt/ml/code/`       | Training code (e.g., `train.py`)   | Script mode training jobs   |
 | `/opt/ml/model/`      | Output model artifacts (`.tar.gz`) | After training              |
 | `/opt/ml/processing/` | Data processing input/output       | Processing jobs             |
+
+<h2>7. Some jobs definition</h2>
+
+- SageMaker Endpoint for real-time inference
+- Model Registry for version control and approval
+
