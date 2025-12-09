@@ -11,6 +11,5 @@ RUN pip install --upgrade pip \
 # Copy inference script
 COPY serve.py /opt/ml/code/serve.py
 
-# SageMaker expects this
-ENV SAGEMAKER_PROGRAM serve.py
+# real time debugging where log is printed directly instead of being stored somewhere, can also be used in Dockerfile-train
 ENV PYTHONUNBUFFERED TRUE
