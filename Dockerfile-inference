@@ -13,3 +13,4 @@ COPY serve.py /opt/ml/code/serve.py
 
 # real time debugging where log is printed directly instead of being stored somewhere, can also be used in Dockerfile-train
 ENV PYTHONUNBUFFERED TRUE
+ENV SAGEMAKER_PROGRAM serve.py
