@@ -7,10 +7,7 @@ WORKDIR /opt/ml/code
 # Install any extra dependencies if needed
 RUN pip install --upgrade pip \
  && pip install \
-    scikit-learn==1.5.1 \
-    cython==3.0.10 \
     pandas \
-    numpy \
     joblib \
     s3fs \
     cloudpickle
