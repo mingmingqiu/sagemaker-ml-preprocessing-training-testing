@@ -1,5 +1,5 @@
 # Use official SageMaker inference base image for CPU
-FROM 763104351884.dkr.ecr.ap-south-1.amazonaws.com/sagemaker-scikit-learn:1.0-1-cpu-py3
+FROM 720646828776.dkr.ecr.ap-south-1.amazonaws.com/sagemaker-scikit-learn:0.23-1-cpu-py3
 
 # Set working directory
 WORKDIR /opt/ml/code
