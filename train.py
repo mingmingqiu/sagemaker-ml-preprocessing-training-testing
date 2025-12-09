@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 import joblib
 import boto3
 import os
+import cloudpickle
 
 print("here training")
 
@@ -36,6 +37,9 @@ model.fit(X_train, y_train)
 
 # ✅ Save model along with feature names
 feature_names = X_train.columns.tolist()
-joblib.dump((model, feature_names), model_output_path)
+# joblib.dump((model, feature_names), model_output_path)
+
+with open("model_output_path", "wb") as f:
+    cloudpickle.dump((model, feature_names), f)
 
 print("✅ Model saved to:", model_output_path)

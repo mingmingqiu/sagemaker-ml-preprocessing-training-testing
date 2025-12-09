@@ -3,11 +3,14 @@ import joblib
 import pandas as pd
 import numpy as np
 from io import StringIO
+import cloudpickle
 
 # Load model
 def model_fn(model_dir):
     print("📦 Loading model from:", model_dir)
-    model, feature_names = joblib.load(os.path.join(model_dir, "model.pkl"))
+    # model, feature_names = joblib.load(os.path.join(model_dir, "model.pkl"))
+    with open(os.path.join(model_dir, "model.pkl"), "rb") as f:
+        model, feature_names = cloudpickle.load(f)
     return model, feature_names
 
 # Parse input request

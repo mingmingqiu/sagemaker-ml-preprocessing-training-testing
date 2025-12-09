@@ -103,3 +103,28 @@ because SageMaker Inference Containers expect the inference entry point to be lo
 - SageMaker Endpoint for real-time inference
 - Model Registry for version control and approval
 
+<h2>8. Solutions to some questions</h2>
+1). Why Register Model?
+
+- You don’t need to register a model to deploy it.
+- But model registration is useful if:
+- You want model versioning (each trained model has a version in a group).
+- You want model approval workflow (e.g., "Approved", "Pending").
+- You use Model Registry in CI/CD pipelines.
+
+2). Why Deployment Works in One Script but Not the Pipeline
+
+Because:
+
+In the pipeline: model artifact might not yet be fully written to S3 when you immediately try to deploy.
+
+In the separate script: the model is already available in S3.
+
+You should always ensure model path is fully available. You're doing the right thing with this:
+
+`execution.wait()  # ✅ Waits for the pipeline to complete`
+
+But also ensure that the `step["Metadata"]["TrainingJob"]["ModelArtifacts"]["S3ModelArtifacts"]` exists
+
+
+
