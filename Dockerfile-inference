@@ -1,16 +1,25 @@
-# Use official SageMaker inference base image for CPU
-FROM 683313688378.dkr.ecr.us-east-1.amazonaws.com/sagemaker-scikit-learn:1.0-1-cpu-py3
+# Base image can be lightweight, as long as we install the right packages
+FROM python:3.9-slim
 
 # Set working directory
 WORKDIR /opt/ml/code
 
-# Install any extra dependencies if needed
-RUN pip install --upgrade pip \
- && pip install pandas numpy s3fs
+# Install dependencies — includes exact scikit-learn version to match training
+RUN apt-get update && apt-get install -y \
+    gcc \
+ && pip install --upgrade pip \
+ && pip install \
+    scikit-learn==1.5.1 \
+    pandas \
+    numpy \
+    joblib \
+    s3fs \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
-# Copy inference script
+# Copy your inference script
 COPY serve.py /opt/ml/code/serve.py
 
-# real time debugging where log is printed directly instead of being stored somewhere, can also be used in Dockerfile-train
-ENV PYTHONUNBUFFERED=TRUE
+# Required SageMaker environment variables
 ENV SAGEMAKER_PROGRAM=serve.py
+ENV PYTHONUNBUFFERED=TRUE
