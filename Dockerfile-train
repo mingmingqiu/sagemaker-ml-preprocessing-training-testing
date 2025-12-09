@@ -6,7 +6,7 @@ WORKDIR /opt/ml/code
 
 # Install dependencies
 RUN pip install --upgrade pip \
- && pip install pandas numpy scikit-learn boto3 s3fs cloudpickle
+ && pip install pandas numpy scikit-learn==1.2.1 boto3 s3fs cloudpickle
 
 COPY train.py /opt/ml/code/train.py
 COPY preprocess.py /opt/ml/code/preprocess.py
