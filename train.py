@@ -39,7 +39,7 @@ model.fit(X_train, y_train)
 feature_names = X_train.columns.tolist()
 # joblib.dump((model, feature_names), model_output_path)
 
-with open("model_output_path", "wb") as f:
+with open(model_output_path, "wb") as f:
     cloudpickle.dump((model, feature_names), f)
 
 print("✅ Model saved to:", model_output_path)

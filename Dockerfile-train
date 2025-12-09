@@ -9,8 +9,8 @@ RUN pip install --upgrade pip \
  && pip install pandas numpy scikit-learn boto3 s3fs cloudpickle
 
 COPY train.py /opt/ml/code/train.py
+COPY preprocess.py /opt/ml/code/preprocess.py
 
 # Set the entry point for training
 # real time debugging where log is printed directly instead of being stored somewhere, can also be used in Dockerfile-train
 ENV PYTHONUNBUFFERED=TRUE
-ENV SAGEMAKER_PROGRAM=train.py
