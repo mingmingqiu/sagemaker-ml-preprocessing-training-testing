@@ -126,5 +126,17 @@ You should always ensure model path is fully available. You're doing the right t
 
 But also ensure that the `step["Metadata"]["TrainingJob"]["ModelArtifacts"]["S3ModelArtifacts"]` exists
 
+3). We must ensure the sklearn versions are the same in both Dockerfile-training and Dockerfile-Inference
+
+When building the docker image `mlops-train` and `mlops-inference`, we can do the following to get the version of scikit-learn:
+
+```bash
+docker run -it mlops-train /bin/bash
+```
+This allows to open an interactive container, then, we can do the following command within the container:
+```bash
+python -c "import sklearn; print(sklearn.__version__)"
+```
+
 
 
