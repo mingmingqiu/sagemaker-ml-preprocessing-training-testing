@@ -143,5 +143,38 @@ Endpoint 'mlops-prod-endpoint-29' does not exist or is not valid
 
 Model Monitor cannot attach itself to an endpoint unless the endpoint enables capture.
 
+4). Why can’t we run inference directly from a Model in the Model Registry?
+Because a Model Package / Model Registry entry contains only metadata + model files \
+➡️ It does NOT contain compute resources to execute inference. \
+A Model Package is essentially:
+```bash
+- Model.tar.gz (your model)
+- Container image URI
+- Input/output formats
+- Version metadata
+```
+But no:
+
+- CPU/GPU
+- Memory
+- Networking
+- Web server
+- /invocations API
+
+Therefore, the registry cannot execute predict() on its own. \
+It is a blueprint, not a running service. 
+
+5). ✅ Why do we create an Endpoint?
+A SageMaker Endpoint:
+- Launches EC2 compute (e.g., ml.m5.large)
+- Loads your container (inference Docker image)
+- Loads your model artifacts (model.tar.gz)
+- Runs them 24/7
+- Exposes /invocations as a REST API
+- Handles autoscaling, retries, logging
+
+Without an endpoint, there is no runtime environment to execute a prediction.
+
+
 
 
