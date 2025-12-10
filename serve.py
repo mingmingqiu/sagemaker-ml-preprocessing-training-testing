@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from io import StringIO
 import cloudpickle
+import json
 
 # Load model
 def model_fn(model_dir):
@@ -48,11 +49,18 @@ def predict_fn(input_data, model_and_features):
 
 # Convert prediction to response
 def output_fn(prediction, accept="application/json"):
-    print("📤 Formatting output...")
     if accept == "application/json":
-        return str(prediction)
+        return json.dumps(prediction)
     else:
         raise ValueError(f"Unsupported accept type: {accept}")
+
+
+# def output_fn(prediction, accept="application/json"):
+#     print("📤 Formatting output...")
+#     if accept == "application/json":
+#         return str(prediction)
+#     else:
+#         raise ValueError(f"Unsupported accept type: {accept}")
 
 
 
