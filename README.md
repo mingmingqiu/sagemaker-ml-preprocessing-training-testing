@@ -138,5 +138,10 @@ This allows to open an interactive container, then, we can do the following comm
 python -c "import sklearn; print(sklearn.__version__)"
 ```
 
+3). ClientError: An error occurred (ValidationException) when calling the CreateDataQualityJobDefinition operation: 
+Endpoint 'mlops-prod-endpoint-29' does not exist or is not valid
+
+Model Monitor cannot attach itself to an endpoint unless the endpoint enables capture.
+
 
 
