@@ -175,6 +175,53 @@ A SageMaker Endpoint:
 
 Without an endpoint, there is no runtime environment to execute a prediction.
 
+6). Difference between event bridge nad lambda function
 
+Use EventBridge when you need to define “WHEN”: \
+⏰ Scheduled retraining 
+- Every night
+- Every week
+- Every month
+  
+→ EventBridge Schedule Rule triggers Lambda.
+
+📦 Event-driven retraining: 
+- S3 receives new training data
+- Model Monitor detects drift
+- Model Registry receives an approved model
+→ EventBridge detects the event → triggers Lambda.
+
+Use Lambda when you need logic or action (“WHAT to do”) \
+Examples of logic inside Lambda:
+
+▶ Start a SageMaker Pipeline
+```bash
+sm.start_pipeline_execution(PipelineName="MLOpsPipeline")
+```
+▶ Update endpoint to latest model
+```bash
+sm.update_endpoint(...)
+```
+▶ Approve a model automatically
+```bash
+sm.update_model_package(ModelApprovalStatus="Approved")
+```
+
+▶ Check data drift metric before retraining \
+Lambda can inspect S3 monitor reports → decide whether to retrain.
+
+🧩 How They Work Together in MLOps 
+```java
+EventBridge (WHEN) 
+     ↓ triggers 
+Lambda (WHAT) 
+     ↓ executes 
+SageMaker Pipeline / Endpoint / Registry 
+```
+
+Example: Nightly retraining
+```bash
+EventBridge cron(0 2 * * ? *)  →  Lambda  →  sm.start_pipeline_execution()
+```
 
 
