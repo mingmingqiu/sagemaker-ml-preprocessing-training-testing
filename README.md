@@ -224,4 +224,131 @@ Example: Nightly retraining
 EventBridge cron(0 2 * * ? *)  →  Lambda  →  sm.start_pipeline_execution()
 ```
 
+<h1> Full worked MLOps Pipeline</h1>
 
+define the following codes named `lambda_function.py` in `mlops-start-pipeline` lambda step function
+
+```bash
+import boto3
+import os
+
+sm = boto3.client("sagemaker")
+
+# Name of your existing SageMaker Pipeline
+PIPELINE_NAME = "MLOpsFullPipeline"
+
+def lambda_handler(event, context):
+    """
+    This Lambda is triggered every hour by EventBridge.
+    It starts the SageMaker Pipeline execution automatically.
+    """
+    
+    print("🔥 LAMBDA HANDLER PIPELINE STARTED")
+
+    print(f"Trigger event: {event}")
+
+    response = sm.start_pipeline_execution(
+        PipelineName=PIPELINE_NAME,
+        PipelineExecutionDisplayName="HourlyRetrain",
+    )
+
+    print("Started pipeline:", response["PipelineExecutionArn"])
+
+    return {
+        "status": "Pipeline triggered",
+        "execution_arn": response["PipelineExecutionArn"]
+    }
+
+```
+
+define the following codes named `lambda_function.py` in `mlops-endpoint-deployer` lambda step function
+
+```bash
+import boto3
+import botocore
+import datetime
+
+sm = boto3.client("sagemaker")
+
+def lambda_handler(event, context):
+    print("🔥 LAMBDA HANDLER STARTED")
+    print("Received event:", event)
+
+    model_package_arn = event["model_package_arn"]
+    endpoint_name = event["endpoint_name"]
+
+    timestamp = datetime.datetime.utcnow().strftime("%Y%m%d%H%M%S")
+
+    # Create a new unique model for every deployment
+    model_name = f"{endpoint_name}-model-{timestamp}"
+    config_name = f"{endpoint_name}-config-{timestamp}"
+
+    # -------------------------------------------------------
+    # 1. Create Model (always new)
+    # -------------------------------------------------------
+    print(f"Creating model: {model_name}")
+
+    sm.create_model(
+        ModelName=model_name,
+        PrimaryContainer={
+            "ModelPackageName": model_package_arn
+        },
+        ExecutionRoleArn="arn:aws:iam::961807745392:role/datazone_usr_role_bx42b1pkqcgp35_bth08ij7nkdhq9"
+    )
+
+    # -------------------------------------------------------
+    # 2. Create new endpoint config (always new)
+    # -------------------------------------------------------
+    print(f"Creating endpoint config: {config_name}")
+
+    sm.create_endpoint_config(
+        EndpointConfigName=config_name,
+        ProductionVariants=[
+            {
+                "InstanceType": "ml.m5.large",
+                "InitialInstanceCount": 1,
+                "ModelName": model_name,   # <--- NEW model
+                "VariantName": "AllTraffic"
+            }
+        ]
+    )
+
+    # -------------------------------------------------------
+    # 3. Create / Update Endpoint
+    # -------------------------------------------------------
+    try:
+        sm.describe_endpoint(EndpointName=endpoint_name)
+        endpoint_exists = True
+    except botocore.exceptions.ClientError:
+        endpoint_exists = False
+
+    if not endpoint_exists:
+        print(f"Creating endpoint: {endpoint_name}")
+        sm.create_endpoint(
+            EndpointName=endpoint_name,
+            EndpointConfigName=config_name,
+        )
+    else:
+        print(f"Updating endpoint: {endpoint_name}")
+        sm.update_endpoint(
+            EndpointName=endpoint_name,
+            EndpointConfigName=config_name,
+        )
+
+    print("Deployment triggered successfully.")
+
+    return {
+        "status": "OK",
+        "endpoint_name": endpoint_name,
+        "endpoint_config": config_name,
+        "model_name": model_name,
+        "model_package_arn": model_package_arn
+    }
+
+```
+
+The whole worked pipeline codes are the codes below `Worked version including the whole MLOps pipeline` of `ml-preprocessing-training-test.ipynb`
+
+the retraining codes are in `Regular retraining every 2am in the morning` of `ml-preprocessing-training-test.ipynb`
+
+the real time inference are in `How This Pipeline Supports REAL-TIME INFERENCE` of `ml-preprocessing-training-test.ipynb`
