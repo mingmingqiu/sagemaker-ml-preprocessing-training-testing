@@ -224,6 +224,25 @@ Example: Nightly retraining
 EventBridge cron(0 2 * * ? *)  →  Lambda  →  sm.start_pipeline_execution()
 ```
 
+<h1> Install new kernels</h1>
+if the sagemaker version is not correct and we have the difficulty of installing the latest sagemaker version, then, we can create a new kernel function:
+
+Create an isolated venv in Jupyter and install v2 inside it. Run the following code:
+```bash
+python -m venv sm-v2
+source sm-v2/bin/activate
+pip install "sagemaker==2.215.0"
+```
+Then start Jupyter using that venv kernel:
+```bash
+pip install ipykernel
+python -m ipykernel install --user --name sm-v2 --display-name "Python (SageMaker v2)"
+```
+Now switch your notebook kernel to Python (SageMaker v2).
+
+
+
+
 <h1> Full worked MLOps Pipeline</h1>
 
 define the following codes named `lambda_function.py` in `mlops-start-pipeline` lambda step function
